@@ -1,2 +1,6 @@
 avatars-folders:
   - './avatars'
+
+# Figura 后端地址（强制 http）
+# 公开的地址要屏蔽掉 Header 里 Host=lambda 的连接，访问内部接口的条件就是这个
+internal-api-url: '127.0.0.1:6665'
