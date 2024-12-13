@@ -1,0 +1,11 @@
+name: FiguraAvatars
+version: '${version}'
+main: top.mrxiaom.figura.bukkit.FiguraAvatars
+api-version: 1.13
+depend: [  ]
+softdepend: [ PlaceholderAPI ]
+authors: [ MrXiaoM ]
+commands:
+  figuraavatars:
+    description: 'The main command of FiguraAvatars'
+    aliases: [ fa, avatars ]
