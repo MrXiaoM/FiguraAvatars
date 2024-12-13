@@ -1,0 +1,16 @@
+# 示例外观配置文件
+# 在 avatars 文件夹中，每个子文件夹都代表「一个外观」，文件夹名称即为外观的ID
+# 在子文件夹中，必须要有以下文件
+#   metadata.yml（本文件，外观的额外元数据）
+#   *.moon 或 *.nbt（外观通过 /figura export 命令导出的文件，任意文件名都可，只能有一个，放多个文件只会读取第一个）
+#
+# 默认外观配置中的外观文件来自 Gakuto1112
+# https://github:com/Gakuto1112/FiguraBlueArchiveCharacters/tree/Hoshino
+
+# 显示名称，如果注释掉此选项，则使用外观文件中的名称
+display: 'Hoshino'
+# 描述，显示在菜单中
+description:
+  - 'Hoshino Takanashi from Blue Archive'
+# 使用该外观所需权限，注释此选项，则无需权限即可使用
+permission: 'figura.avatars.hoshino'

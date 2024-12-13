@@ -32,7 +32,11 @@ public class Avatars extends AbstractModule {
     private void reloadAvatars(File avatarsFolder) {
         if (!avatarsFolder.exists()) {
             Util.mkdirs(avatarsFolder);
-            return;
+            // 导出默认配置
+            File folder = new File(avatarsFolder, "hoshino");
+            plugin.saveResource("avatars/hoshino/metadata.yml", new File(folder, "metadata.yml"));
+            plugin.saveResource("avatars/hoshino/hoshino.yml", new File(folder, "hoshino.yml"));
+            plugin.saveResource("avatars/hoshino/LICENSE", new File(folder, "LICENSE"));
         }
         File[] files = avatarsFolder.listFiles();
         if (files != null) for (File folder : files) {
