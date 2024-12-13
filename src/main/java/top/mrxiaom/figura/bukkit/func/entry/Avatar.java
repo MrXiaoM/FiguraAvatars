@@ -2,9 +2,11 @@ package top.mrxiaom.figura.bukkit.func.entry;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTFile;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.Nullable;
 import top.mrxiaom.pluginbase.utils.Pair;
+import top.mrxiaom.pluginbase.utils.Util;
 
 import java.io.File;
 import java.util.List;
@@ -12,20 +14,26 @@ import java.util.List;
 public class Avatar {
     public final String id;
     public final File moon;
+    public final Material material;
+    public final @Nullable Integer customModelData;
     public final String name;
     public final String authors;
     public final String figuraVersion;
     public final List<String> description;
-    public final @Nullable String permission;
+    public final @Nullable String viewPermission;
+    public final @Nullable String equipPermission;
 
-    Avatar(String id, File moon, String name, String authors, String figuraVersion, List<String> description, @Nullable String permission) {
+    Avatar(String id, File moon, Material material, @Nullable Integer customModelData, String name, String authors, String figuraVersion, List<String> description, @Nullable String viewPermission, @Nullable String equipPermission) {
         this.id = id;
         this.moon = moon;
+        this.material = material;
+        this.customModelData = customModelData;
         this.name = name;
         this.authors = authors;
         this.figuraVersion = figuraVersion;
         this.description = description;
-        this.permission = permission;
+        this.viewPermission = viewPermission;
+        this.equipPermission = equipPermission;
     }
 
     @Nullable
@@ -50,10 +58,15 @@ public class Avatar {
         if (config.contains("display")) {
             name = config.getString("display");
         }
+        Material material = Util.valueOr(Material.class, config.getString("material"), Material.PAPER);
+        Integer customModelData = config.contains("custom-model-data")
+                ? config.getInt("custom-model-data")
+                : null;
         List<String> description = config.getStringList("description");
-        String permission = config.getString("permission", null);
+        String viewPermission = config.getString("permission.view", null);
+        String equipPermission = config.getString("permission.equip", null);
 
-        return new Avatar(id, moon, name, authors, figuraVersion, description, permission);
+        return new Avatar(id, moon, material, customModelData, name, authors, figuraVersion, description, viewPermission, equipPermission);
     }
 
     private static IllegalStateException illegalState(String message) {

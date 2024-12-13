@@ -7,10 +7,17 @@
 # 默认外观配置中的外观文件来自 Gakuto1112
 # https://github:com/Gakuto1112/FiguraBlueArchiveCharacters/tree/Hoshino
 
+# 在菜单上显示的物品图标
+material: PAPER
+custom-model-data: 10000
 # 显示名称，如果注释掉此选项，则使用外观文件中的名称
 display: 'Hoshino'
 # 描述，显示在菜单中
 description:
   - 'Hoshino Takanashi from Blue Archive'
-# 使用该外观所需权限，注释此选项，则无需权限即可使用
-permission: 'figura.avatars.hoshino'
+# 外观相关权限，注释相关选项，则无需权限
+permissions:
+  # 在界面中查看的权限
+  view: 'figura.view.default'
+  # 外观使用权限
+  equip: 'figura.avatars.hoshino'
