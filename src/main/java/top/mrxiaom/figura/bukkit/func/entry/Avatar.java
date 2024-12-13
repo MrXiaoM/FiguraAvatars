@@ -28,9 +28,13 @@ public class Avatar {
         this.permission = permission;
     }
 
+    @Nullable
     public static Avatar loadFromFolder(File folder) throws Exception {
         Pair<File, File> pair = find(folder);
-        if (pair == null) throw illegalState("文件不全，需要一个 metadata.yml 和一个 .moon 或 .nbt 外观文件");
+        if (pair == null) {
+            if (new File(folder, ".ignore").exists()) return null;
+            throw illegalState("文件不全，需要一个 metadata.yml 和一个 .moon 或 .nbt 外观文件");
+        }
         String id = folder.getName();
         File extraMeta = pair.getKey();
         File moon = pair.getValue();

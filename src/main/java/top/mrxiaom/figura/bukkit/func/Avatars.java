@@ -12,7 +12,6 @@ import java.util.Map;
 
 @AutoRegister
 public class Avatars extends AbstractModule {
-    File avatarsFolder;
     Map<String, Avatar> avatars = new HashMap<>();
     public Avatars(FiguraAvatars plugin) {
         super(plugin);
@@ -20,17 +19,17 @@ public class Avatars extends AbstractModule {
 
     @Override
     public void reloadConfig(MemoryConfiguration config) {
-        String path = config.getString("avatars-folder", "./avatars");
-        if (path.startsWith("./")) {
-            avatarsFolder = new File(plugin.getDataFolder(), path.substring(2));
-        } else {
-            avatarsFolder = new File(path);
+        avatars.clear();
+        for (String path : config.getStringList("avatars-folders")) {
+            if (path.startsWith("./")) {
+                reloadAvatars(new File(plugin.getDataFolder(), path.substring(2)));
+            } else {
+                reloadAvatars(new File(path));
+            }
         }
-        reloadAvatars();
     }
 
-    private void reloadAvatars() {
-        avatars.clear();
+    private void reloadAvatars(File avatarsFolder) {
         if (!avatarsFolder.exists()) {
             Util.mkdirs(avatarsFolder);
             return;
@@ -39,7 +38,9 @@ public class Avatars extends AbstractModule {
         if (files != null) for (File folder : files) {
             try {
                 Avatar avatar = Avatar.loadFromFolder(folder);
-                avatars.put(avatar.id, avatar);
+                if (avatar != null) {
+                    avatars.put(avatar.id, avatar);
+                }
             } catch (Throwable t) {
                 warn("加载外观配置 " + folder.getName() + " 时出现错误", t);
             }

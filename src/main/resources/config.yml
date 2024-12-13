@@ -1,1 +1,2 @@
-avatars-folder: './avatars'
+avatars-folders:
+  - './avatars'
