@@ -2,6 +2,9 @@ package top.mrxiaom.figura.bukkit.func;
 
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import org.bukkit.configuration.MemoryConfiguration;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import top.mrxiaom.figura.bukkit.FiguraAvatars;
 import top.mrxiaom.figura.bukkit.func.entry.Avatar;
 import top.mrxiaom.pluginbase.func.AutoRegister;
@@ -18,17 +21,27 @@ import java.util.Map;
 import java.util.UUID;
 
 @AutoRegister
-public class Avatars extends AbstractModule {
+public class Avatars extends AbstractModule implements Listener {
     Map<String, Avatar> avatars = new HashMap<>();
     final String userAgent;
     String apiUrl;
     public Avatars(FiguraAvatars plugin) {
         super(plugin);
         userAgent = "Minecraft/" + MinecraftVersion.getVersion().name() + " FiguraAvatars/" + plugin.getDescription().getVersion();
+        registerEvents();
+    }
+
+    @EventHandler
+    public void on(PlayerJoinEvent e) {
+        sendUploadState(e.getPlayer().getUniqueId(), e.getPlayer().hasPermission("figura.upload"));
     }
 
     public HttpURLConnection createConnection(String path) throws IOException {
-        return (HttpURLConnection) new URL(apiUrl + path).openConnection();
+        HttpURLConnection conn = (HttpURLConnection) new URL(apiUrl + path).openConnection();
+        conn.addRequestProperty("Accept", "*/*");
+        conn.addRequestProperty("Host", "lambda");
+        conn.addRequestProperty("User-Agent", userAgent);
+        return conn;
     }
 
     @Override
@@ -51,7 +64,7 @@ public class Avatars extends AbstractModule {
             // 导出默认配置
             File folder = new File(avatarsFolder, "hoshino");
             plugin.saveResource("avatars/hoshino/metadata.yml", new File(folder, "metadata.yml"));
-            plugin.saveResource("avatars/hoshino/hoshino.yml", new File(folder, "hoshino.yml"));
+            plugin.saveResource("avatars/hoshino/hoshino.moon", new File(folder, "hoshino.moon"));
             plugin.saveResource("avatars/hoshino/LICENSE", new File(folder, "LICENSE"));
         }
         File[] files = avatarsFolder.listFiles();
@@ -71,9 +84,6 @@ public class Avatars extends AbstractModule {
         try {
             HttpURLConnection conn = createConnection(uuid + "/avatar");
             conn.setRequestMethod("DELETE");
-            conn.addRequestProperty("Accept", "*/*");
-            conn.addRequestProperty("Host", "lambda");
-            conn.addRequestProperty("User-Agent", userAgent);
             conn.connect();
             int responseCode = conn.getResponseCode();
             if (responseCode != 200) {
@@ -89,9 +99,6 @@ public class Avatars extends AbstractModule {
             HttpURLConnection conn = createConnection(uuid + (temp ? "/temp" : "/avatar"));
             conn.setRequestMethod("PUT");
             conn.setDoOutput(true);
-            conn.addRequestProperty("Accept", "*/*");
-            conn.addRequestProperty("Host", "lambda");
-            conn.addRequestProperty("User-Agent", userAgent);
             conn.connect();
             try (OutputStream output = conn.getOutputStream()) {
                 try (FileInputStream input = new FileInputStream(file)) {
@@ -115,13 +122,24 @@ public class Avatars extends AbstractModule {
         try {
             HttpURLConnection conn = createConnection(uuid + "/event");
             conn.setRequestMethod("GET");
-            conn.addRequestProperty("Accept", "*/*");
-            conn.addRequestProperty("Host", "lambda");
-            conn.addRequestProperty("User-Agent", userAgent);
             conn.connect();
             int responseCode = conn.getResponseCode();
             if (responseCode != 200) {
                 warn("执行失败 GET /internal/" + uuid + "/event: " + responseCode);
+            }
+        } catch (IOException e) {
+            warn(e);
+        }
+    }
+
+    public void sendUploadState(UUID uuid, boolean newState) {
+        try {
+            HttpURLConnection conn = createConnection(uuid + "/upload_state/" + newState);
+            conn.setRequestMethod("GET");
+            conn.connect();
+            int responseCode = conn.getResponseCode();
+            if (responseCode != 200) {
+                warn("执行失败 GET /internal/" + uuid + "/upload_state/" + newState + ": " + responseCode);
             }
         } catch (IOException e) {
             warn(e);
