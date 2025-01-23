@@ -3,6 +3,7 @@ package top.mrxiaom.figura.bukkit.func;
 import com.google.common.collect.Lists;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import org.bukkit.configuration.MemoryConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -12,10 +13,8 @@ import top.mrxiaom.figura.bukkit.func.entry.Avatar;
 import top.mrxiaom.pluginbase.func.AutoRegister;
 import top.mrxiaom.pluginbase.utils.Util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
@@ -78,6 +77,25 @@ public class Avatars extends AbstractModule implements Listener {
                 warn("加载外观配置 " + folder.getName() + " 时出现错误", t);
             }
         }
+    }
+
+    public void customPayload(Player player, String id, byte[] bytes) {
+        // 发送 CustomPayLoad 包
+        if (!player.getListeningPluginChannels().contains(id)) {
+            Class<? extends Player> clazz = player.getClass();
+            try {
+                Method method = clazz.getDeclaredMethod("addChannel", String.class);
+                method.invoke(player, id);
+            } catch (ReflectiveOperationException e) {
+                warn(e);
+                return;
+            }
+        }
+        player.sendPluginMessage(plugin, id, bytes);
+    }
+
+    public void openWardrobe(Player player) {
+        customPayload(player, "figura:wardrobe", new ByteArrayOutputStream().toByteArray());
     }
 
     public Set<String> keys() {

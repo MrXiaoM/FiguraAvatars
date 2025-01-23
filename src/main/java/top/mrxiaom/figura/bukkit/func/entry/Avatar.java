@@ -2,15 +2,18 @@ package top.mrxiaom.figura.bukkit.func.entry;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTFile;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
+import top.mrxiaom.figura.bukkit.func.Avatars;
 import top.mrxiaom.pluginbase.utils.Pair;
 import top.mrxiaom.pluginbase.utils.Util;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 public class Avatar {
     public final String id;
@@ -48,11 +51,19 @@ public class Avatar {
     }
 
     public void preview(Player player) {
-        // TODO
+        Avatars manager = Avatars.inst();
+        UUID uuid = player.getUniqueId();
+        manager.putAvatar(uuid, moon, true);
+        manager.sendUpdateAvatar(uuid);
+        Bukkit.getScheduler().runTask(manager.plugin, () -> manager.openWardrobe(player));
     }
 
     public void equip(Player player) {
-        // TODO
+        Avatars manager = Avatars.inst();
+        UUID uuid = player.getUniqueId();
+        manager.putAvatar(uuid, moon, false);
+        manager.sendUpdateAvatar(uuid);
+        Bukkit.getScheduler().runTask(manager.plugin, () -> manager.openWardrobe(player));
     }
 
     @Nullable
