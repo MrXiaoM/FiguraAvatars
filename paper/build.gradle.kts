@@ -1,6 +1,9 @@
 plugins {
     java
 }
+repositories {
+    maven("https://repo.papermc.io/repository/maven-public/")
+}
 version = "1.0-SNAPSHOT"
 dependencies {
     compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
