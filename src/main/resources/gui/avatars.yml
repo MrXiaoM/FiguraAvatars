@@ -1,16 +1,18 @@
+# 界面标题
 title: '选择外观'
-
+# 界面布局
 inventory:
   - '框框框框框框框框框'
   - '框项项项项项项项框'
   - '上项项项项项项项下'
   - '框框框框框框框框框'
   - '框框框框返框框框框'
-
+# 主要图标
 main-icons:
   项:
     material: PAPER
     display: '&e&l%name%'
+    # 格子里没有项目时，转跳到什么额外图标
     redirect: ' '
     lore:
       - '&f作者: &e%author%'
@@ -27,14 +29,18 @@ main-icons:
         - '&c&m右键&r&7 | &f没有权限'
   上:
     material: LIME_STAINED_GLASS_PANE
+    # 没有上一页时，转跳到什么额外图标
     redirect: 框
     display: '&e上一页'
     lore: []
   下:
     material: LIME_STAINED_GLASS_PANE
+    # 没有下一页时，转跳到什么额外图标
     redirect: 框
     display: '&e下一页'
     lore: []
+# 额外图标，编写示例请见以下链接内容的末尾
+# https://github.com/MrXiaoM/PluginBase/blob/main/docs/gui.config.md
 other-icons:
   框:
     material: WHITE_STAINED_GLASS_PANE
