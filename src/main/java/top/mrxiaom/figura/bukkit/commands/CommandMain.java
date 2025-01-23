@@ -12,6 +12,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.mrxiaom.figura.bukkit.Messages;
+import top.mrxiaom.figura.bukkit.func.Avatars;
 import top.mrxiaom.figura.bukkit.gui.GuiAvatars;
 import top.mrxiaom.pluginbase.func.AutoRegister;
 import top.mrxiaom.figura.bukkit.FiguraAvatars;
@@ -29,6 +30,16 @@ public class CommandMain extends AbstractModule implements CommandExecutor, TabC
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (args.length == 2 && "refresh".equalsIgnoreCase(args[0]) && sender.isOp()) {
+            Player player = Util.getOnlinePlayer(args[1]).orElse(null);
+            if (player == null) {
+                return Messages.player__not_found.tm(sender);
+            }
+            UUID uuid = player.getUniqueId();
+            boolean state = player.hasPermission("figura.upload");
+            Avatars.inst().sendUploadState(uuid, state);
+            return Messages.commands__refresh_success.tm(sender);
+        }
         if (args.length >= 1 && "open".equalsIgnoreCase(args[0])) {
             Player target;
             if (args.length >= 2) {
@@ -66,14 +77,22 @@ public class CommandMain extends AbstractModule implements CommandExecutor, TabC
     }
 
     private static final List<String> emptyList = Lists.newArrayList();
-    private static final List<String> listArg0 = Lists.newArrayList();
+    private static final List<String> listArg0 = Lists.newArrayList("open");
     private static final List<String> listOpArg0 = Lists.newArrayList(
-            "reload");
+            "open", "refresh", "reload");
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1) {
             return startsWith(sender.isOp() ? listOpArg0 : listArg0, args[0]);
+        }
+        if (args.length == 2) {
+            if ("open".equalsIgnoreCase(args[0]) && sender.hasPermission("figura.avatars.open.other")) {
+                return null;
+            }
+            if ("refresh".equalsIgnoreCase(args[0]) && sender.isOp()) {
+                return null;
+            }
         }
         return emptyList;
     }
