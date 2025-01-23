@@ -17,6 +17,7 @@ import top.mrxiaom.figura.bukkit.gui.GuiAvatars;
 import top.mrxiaom.pluginbase.func.AutoRegister;
 import top.mrxiaom.figura.bukkit.FiguraAvatars;
 import top.mrxiaom.figura.bukkit.func.AbstractModule;
+import top.mrxiaom.pluginbase.utils.Pair;
 import top.mrxiaom.pluginbase.utils.Util;
 
 import java.util.*;
@@ -38,7 +39,19 @@ public class CommandMain extends AbstractModule implements CommandExecutor, TabC
             UUID uuid = player.getUniqueId();
             boolean state = player.hasPermission("figura.upload");
             Avatars.inst().sendUploadState(uuid, state);
-            return Messages.commands__refresh_success.tm(sender);
+            return Messages.commands__refresh_success.tm(sender, Pair.of("%player%", player.getName()));
+        }
+        if (args.length >= 2 && "wardrobe".equalsIgnoreCase(args[0]) && sender.isOp()) {
+            Player player = Util.getOnlinePlayer(args[1]).orElse(null);
+            if (player == null) {
+                return Messages.player__not_found.tm(sender);
+            }
+            boolean silent = args.length >= 3 && args[2].equals("-s");
+            Avatars.inst().openWardrobe(player);
+            if (!silent) {
+                Messages.commands__wardrobe_success.tm(sender, Pair.of("%player%", player.getName()));
+            }
+            return true;
         }
         if (args.length >= 1 && "open".equalsIgnoreCase(args[0])) {
             Player target;
@@ -79,7 +92,7 @@ public class CommandMain extends AbstractModule implements CommandExecutor, TabC
     private static final List<String> emptyList = Lists.newArrayList();
     private static final List<String> listArg0 = Lists.newArrayList("open");
     private static final List<String> listOpArg0 = Lists.newArrayList(
-            "open", "refresh", "reload");
+            "open", "wardrobe", "refresh", "reload");
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
@@ -88,6 +101,9 @@ public class CommandMain extends AbstractModule implements CommandExecutor, TabC
         }
         if (args.length == 2) {
             if ("open".equalsIgnoreCase(args[0]) && sender.hasPermission("figura.avatars.open.other")) {
+                return null;
+            }
+            if ("wardrobe".equalsIgnoreCase(args[0]) && sender.isOp()) {
                 return null;
             }
             if ("refresh".equalsIgnoreCase(args[0]) && sender.isOp()) {

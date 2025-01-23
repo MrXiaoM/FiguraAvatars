@@ -11,12 +11,13 @@ Figura λ 外观管理插件
 根命令 `/figuraavatars`，别名 `/fa` 或 `/avatars`。  
 `<>`包裹的是必选参数，`[]`包裹的是可选参数
 
-| 命令                      | 描述           | 权限                          |
-|-------------------------|--------------|-----------------------------|
-| `/avatars open`         | 打开外观选择界面     | `figura.avatars.open`       |
-| `/avatars open <玩家>`    | 为某玩家打开外观选择界面 | `figura.avatars.open.other` |
-| `/avatars refresh <玩家>` | 刷新玩家的上传权限状态  | OP/控制台                      |
-| `/avatars reload`       | 重载插件配置文件     | OP/控制台                      |
+| 命令                            | 描述                   | 权限                          |
+|-------------------------------|----------------------|-----------------------------|
+| `/avatars open`               | 打开外观选择界面             | `figura.avatars.open`       |
+| `/avatars open <玩家>`          | 为某玩家打开外观选择界面         | `figura.avatars.open.other` |
+| `/avatars refresh <玩家>`       | 刷新玩家的上传权限状态          | OP/控制台                      |
+| `/avatars wardrobe <玩家> [-s]` | 为玩家打开衣柜，输入-s则不显示成功提示 | OP/控制台                      |
+| `/avatars reload`             | 重载插件配置文件             | OP/控制台                      |
 
 ## 权限
 
