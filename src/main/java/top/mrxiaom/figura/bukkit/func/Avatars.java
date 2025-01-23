@@ -64,6 +64,7 @@ public class Avatars extends AbstractModule implements Listener {
                 reloadAvatars(new File(path), false);
             }
         }
+        info("[avatars] 共加载 " + avatars.size() + " 个外观配置");
     }
 
     private void reloadAvatars(File avatarsFolder, boolean exportDefault) {
