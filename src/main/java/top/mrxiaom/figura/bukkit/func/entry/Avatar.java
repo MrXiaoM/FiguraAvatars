@@ -4,6 +4,7 @@ import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTFile;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import top.mrxiaom.pluginbase.utils.Pair;
 import top.mrxiaom.pluginbase.utils.Util;
@@ -34,6 +35,24 @@ public class Avatar {
         this.description = description;
         this.viewPermission = viewPermission;
         this.equipPermission = equipPermission;
+    }
+
+    public boolean canPreview(Player player) {
+        if (viewPermission == null) return true;
+        return player.hasPermission(viewPermission);
+    }
+
+    public boolean canEquip(Player player) {
+        if (equipPermission == null) return true;
+        return player.hasPermission(equipPermission);
+    }
+
+    public void preview(Player player) {
+        // TODO
+    }
+
+    public void equip(Player player) {
+        // TODO
     }
 
     @Nullable

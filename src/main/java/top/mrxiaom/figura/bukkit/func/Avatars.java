@@ -1,10 +1,12 @@
 package top.mrxiaom.figura.bukkit.func;
 
+import com.google.common.collect.Lists;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.jetbrains.annotations.Nullable;
 import top.mrxiaom.figura.bukkit.FiguraAvatars;
 import top.mrxiaom.figura.bukkit.func.entry.Avatar;
 import top.mrxiaom.pluginbase.func.AutoRegister;
@@ -16,9 +18,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @AutoRegister
 public class Avatars extends AbstractModule implements Listener {
@@ -78,6 +78,19 @@ public class Avatars extends AbstractModule implements Listener {
                 warn("加载外观配置 " + folder.getName() + " 时出现错误", t);
             }
         }
+    }
+
+    public Set<String> keys() {
+        return avatars.keySet();
+    }
+
+    @Nullable
+    public Avatar get(String id) {
+        return avatars.get(id);
+    }
+
+    public List<Avatar> all() {
+        return Lists.newArrayList(avatars.values());
     }
 
     public void deleteAvatar(UUID uuid) {
@@ -146,7 +159,7 @@ public class Avatars extends AbstractModule implements Listener {
         }
     }
 
-    public Avatars inst() {
+    public static Avatars inst() {
         return instanceOf(Avatars.class);
     }
 }
