@@ -127,6 +127,10 @@ public class Avatars extends AbstractModule implements Listener {
         customPayload(player, "figura:wardrobe", new ByteArrayOutputStream().toByteArray());
     }
 
+    public void requestReconnect(Player player) {
+        customPayload(player, "figura:reconnect", new ByteArrayOutputStream().toByteArray());
+    }
+
     public Set<String> keys() {
         return avatars.keySet();
     }

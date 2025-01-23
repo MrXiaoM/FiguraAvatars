@@ -34,6 +34,7 @@ public class FiguraAvatars extends BukkitPlugin {
     @Override
     protected void beforeEnable() {
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "figura:uuid");
+        Bukkit.getMessenger().registerOutgoingPluginChannel(this, "figura:reconnect");
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "figura:wardrobe");
         MiniMessageConvert.init();
         if (Util.isPresent("com.destroystokyo.paper.utils.PaperPluginLogger")) {

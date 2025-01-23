@@ -39,6 +39,7 @@ public class CommandMain extends AbstractModule implements CommandExecutor, TabC
             UUID uuid = player.getUniqueId();
             boolean state = player.hasPermission("figura.upload");
             Avatars.inst().sendUploadState(uuid, state);
+            Avatars.inst().requestReconnect(player);
             return Messages.commands__refresh_success.tm(sender, Pair.of("%player%", player.getName()));
         }
         if (args.length >= 2 && "wardrobe".equalsIgnoreCase(args[0]) && sender.isOp()) {
