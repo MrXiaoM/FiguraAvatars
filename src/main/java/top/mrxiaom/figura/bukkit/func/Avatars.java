@@ -57,22 +57,25 @@ public class Avatars extends AbstractModule implements Listener {
         String host = config.getString("internal-api-url", "127.0.0.1:6665");
         apiUrl = "http://" + (host.endsWith("/") ? host : (host + "/")) + "internal/";
         for (String path : config.getStringList("avatars-folders")) {
+            boolean exportDefault = path.equals("./avatars");
             if (path.startsWith("./")) {
-                reloadAvatars(new File(plugin.getDataFolder(), path.substring(2)));
+                reloadAvatars(new File(plugin.getDataFolder(), path.substring(2)), exportDefault);
             } else {
-                reloadAvatars(new File(path));
+                reloadAvatars(new File(path), false);
             }
         }
     }
 
-    private void reloadAvatars(File avatarsFolder) {
+    private void reloadAvatars(File avatarsFolder, boolean exportDefault) {
         if (!avatarsFolder.exists()) {
             Util.mkdirs(avatarsFolder);
             // 导出默认配置
-            File folder = new File(avatarsFolder, "hoshino");
-            plugin.saveResource("avatars/hoshino/metadata.yml", new File(folder, "metadata.yml"));
-            plugin.saveResource("avatars/hoshino/hoshino.moon", new File(folder, "hoshino.moon"));
-            plugin.saveResource("avatars/hoshino/LICENSE", new File(folder, "LICENSE"));
+            if (exportDefault) {
+                File folder = new File(avatarsFolder, "hoshino");
+                plugin.saveResource("avatars/hoshino/metadata.yml", new File(folder, "metadata.yml"));
+                plugin.saveResource("avatars/hoshino/hoshino.moon", new File(folder, "hoshino.moon"));
+                plugin.saveResource("avatars/hoshino/LICENSE", new File(folder, "LICENSE"));
+            }
         }
         File[] files = avatarsFolder.listFiles();
         if (files != null) for (File folder : files) {
