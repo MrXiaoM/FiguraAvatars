@@ -16,8 +16,8 @@ public class FiguraAvatars extends BukkitPlugin {
         super(options()
                 .bungee(false)
                 .adventure(true)
-                .database(true)
-                .reconnectDatabaseWhenReloadConfig(true)
+                .database(false)
+                .reconnectDatabaseWhenReloadConfig(false)
                 .vaultEconomy(false)
                 .scanIgnore("top.mrxiaom.figura.bukkit.libs")
         );
@@ -37,9 +37,6 @@ public class FiguraAvatars extends BukkitPlugin {
         } else {
             inventoryFactory = new BukkitInventoryFactory();
         }
-        options.registerDatabase(
-                // 在这里添加数据库 (如果需要的话)
-        );
     }
 
     @Override
