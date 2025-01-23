@@ -32,7 +32,7 @@ dependencies {
     implementation("de.tr7zw:item-nbt-api:2.13.2")
     implementation("com.zaxxer:HikariCP:4.0.3") { isTransitive = false }
     implementation("org.jetbrains:annotations:21.0.0")
-    implementation("com.github.MrXiaoM:PluginBase:1+")
+    implementation("top.mrxiaom:PluginBase:1.2.2")
     implementation(project(":paper"))
 }
 tasks {
