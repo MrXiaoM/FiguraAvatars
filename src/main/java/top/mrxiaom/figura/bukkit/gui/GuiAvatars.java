@@ -190,14 +190,20 @@ public class GuiAvatars extends AbstractGuiModule {
         public void prevPage() {
             if (canPrevPage()) {
                 page--;
-                // TODO: 刷新页面
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    updateInventory(created);
+                    submitUpdate();
+                });
             }
         }
 
         public void nextPage() {
             if (canNextPage()) {
                 page++;
-                // TODO: 刷新页面
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    updateInventory(created);
+                    submitUpdate();
+                });
             }
         }
 
@@ -270,6 +276,11 @@ public class GuiAvatars extends AbstractGuiModule {
                     break;
                 }
             }
+        }
+
+        @SuppressWarnings({"UnstableApiUsage"})
+        public void submitUpdate() {
+            this.player.updateInventory();
         }
     }
 
