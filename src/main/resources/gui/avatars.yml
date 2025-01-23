@@ -24,7 +24,7 @@ main-icons:
       equip:
         - '&b右键&7 | &f切换到该外观'
       equip-no-permission:
-        - '&c&m右键&7 | &f没有权限'
+        - '&c&m右键&r&7 | &f没有权限'
   上:
     material: LIME_STAINED_GLASS_PANE
     redirect: 框

@@ -11,10 +11,11 @@
 material: PAPER
 custom-model-data: 10000
 # 显示名称，如果注释掉此选项，则使用外观文件中的名称
-display: 'Hoshino'
+display: '小鳥遊　星野'
 # 描述，显示在菜单中
 description:
-  - 'Hoshino Takanashi from Blue Archive'
+  - '&e电子游戏&f「&b蔚蓝档案&f」&e的角色'
+  - '&e小鸟游星野 &7(Hoshino Takanashi)'
 # 外观相关权限，注释相关选项，则无需权限
 permissions:
   # 在界面中查看的权限
