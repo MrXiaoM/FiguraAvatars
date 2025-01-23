@@ -93,7 +93,7 @@ public class GuiAvatars extends AbstractGuiModule {
         switch (id) {
             case '项': {
                 int i = gui.pageOffset() + appearTimes - 1;
-                if (i > gui.avatars.size()) {
+                if (i >= gui.avatars.size()) {
                     return otherIcon(player, itemRedirect);
                 }
                 Avatar avatar = gui.avatars.get(i);
