@@ -2,8 +2,8 @@ name: FiguraAvatars
 version: '${version}'
 main: top.mrxiaom.figura.bukkit.FiguraAvatars
 api-version: 1.13
-depend: [  ]
-softdepend: [ PlaceholderAPI ]
+softdepend:
+  - PlaceholderAPI
 authors: [ MrXiaoM ]
 commands:
   figuraavatars:
