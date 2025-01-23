@@ -35,12 +35,6 @@ dependencies {
     implementation("com.github.MrXiaoM:PluginBase:1+")
     implementation(project(":paper"))
 }
-java {
-    val javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion.set(JavaLanguageVersion.of(targetJavaVersion))
-    }
-}
 tasks {
     shadowJar {
         archiveClassifier.set("")
@@ -59,12 +53,6 @@ tasks {
     build {
         dependsOn(shadowJar)
     }
-    withType<JavaCompile>().configureEach {
-        options.encoding = "UTF-8"
-        if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible) {
-            options.release.set(targetJavaVersion)
-        }
-    }
     processResources {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
         from(sourceSets.main.get().resources.srcDirs) {
@@ -73,6 +61,22 @@ tasks {
         }
     }
 }
+allprojects {
+    apply(plugin = "java")
+    java {
+        val javaVersion = JavaVersion.toVersion(targetJavaVersion)
+        if (JavaVersion.current() < javaVersion) {
+            toolchain.languageVersion.set(JavaLanguageVersion.of(targetJavaVersion))
+        }
+    }
+    tasks.withType<JavaCompile>().configureEach {
+        options.encoding = "UTF-8"
+        if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible) {
+            options.release.set(targetJavaVersion)
+        }
+    }
+}
+
 publishing {
     publications {
         create<MavenPublication>("maven") {
