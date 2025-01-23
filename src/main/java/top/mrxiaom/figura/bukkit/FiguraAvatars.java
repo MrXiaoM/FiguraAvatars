@@ -5,6 +5,7 @@ import top.mrxiaom.figura.bukkit.utils.InventoryFactory;
 import top.mrxiaom.figura.bukkit.utils.MiniMessageConvert;
 import top.mrxiaom.figura.bukkit.utils.PaperInventoryFactory;
 import top.mrxiaom.pluginbase.BukkitPlugin;
+import top.mrxiaom.pluginbase.func.LanguageManager;
 import top.mrxiaom.pluginbase.utils.Util;
 
 public class FiguraAvatars extends BukkitPlugin {
@@ -37,6 +38,9 @@ public class FiguraAvatars extends BukkitPlugin {
         } else {
             inventoryFactory = new BukkitInventoryFactory();
         }
+        LanguageManager.inst()
+                .setLangFile("messages.yml")
+                .register(Messages.class, Messages::holder);
     }
 
     @Override

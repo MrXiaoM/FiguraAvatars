@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.mrxiaom.figura.bukkit.Messages;
 import top.mrxiaom.figura.bukkit.gui.GuiAvatars;
 import top.mrxiaom.pluginbase.func.AutoRegister;
 import top.mrxiaom.figura.bukkit.FiguraAvatars;
@@ -30,19 +31,19 @@ public class CommandMain extends AbstractModule implements CommandExecutor, TabC
             Player target;
             if (args.length >= 2) {
                 if (!sender.hasPermission("figura.avatars.open.other")) {
-                    return t(sender, "&a你没有权限执行此操作");
+                    return Messages.commands__no_permission.tm(sender);
                 }
                 target = Util.getOnlinePlayer(args[1]).orElse(null);
                 if (target == null) {
-                    return t(sender, "&e玩家不在线 (或不存在)");
+                    return Messages.player__not_found.tm(sender);
                 }
             } else {
                 target = sender instanceof Player ? (Player) sender : null;
                 if (target == null) {
-                    return t(sender, "&e只有玩家才能执行该命令");
+                    return Messages.player__only.tm(sender);
                 }
                 if (!target.hasPermission("figura.avatars.open")) {
-                    return t(target, "&a你没有权限执行此操作");
+                    return Messages.commands__no_permission.tm(target);
                 }
             }
             GuiAvatars.inst().createGui(target).open();
@@ -50,7 +51,7 @@ public class CommandMain extends AbstractModule implements CommandExecutor, TabC
         }
         if (args.length == 1 && "reload".equalsIgnoreCase(args[0]) && sender.isOp()) {
             plugin.reloadConfig();
-            return t(sender, "&a配置文件已重载");
+            return Messages.commands__reload.tm(sender);
         }
         return true;
     }
