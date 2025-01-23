@@ -29,6 +29,7 @@ dependencies {
     implementation("net.kyori:adventure-api:4.17.0")
     implementation("net.kyori:adventure-platform-bukkit:4.3.4")
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
+    implementation("org.apache.httpcomponents:httpclient:4.5.14")
     implementation("de.tr7zw:item-nbt-api:2.14.1")
     implementation("org.jetbrains:annotations:24.0.0")
     implementation("top.mrxiaom:PluginBase:1.2.2")
@@ -42,6 +43,8 @@ tasks {
             "org.jetbrains.annotations" to "annotations.jetbrains",
             "top.mrxiaom.pluginbase" to "base",
             "de.tr7zw.changeme.nbtapi" to "nbtapi",
+            "org.apache.commons" to "commons",
+            "org.apache.http" to "http",
             "net.kyori" to "kyori",
         ).forEach { (original, target) ->
             relocate(original, "$shadowGroup.$target")

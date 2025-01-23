@@ -5,6 +5,10 @@ import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufUtil;
+import org.apache.http.client.methods.*;
+import org.apache.http.entity.InputStreamEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,8 +22,6 @@ import top.mrxiaom.pluginbase.utils.Util;
 
 import java.io.*;
 import java.lang.reflect.Method;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.*;
 
 @AutoRegister
@@ -43,12 +45,26 @@ public class Avatars extends AbstractModule implements Listener {
         sendUploadState(e.getPlayer().getUniqueId(), e.getPlayer().hasPermission("figura.upload"));
     }
 
-    public HttpURLConnection createConnection(String path) throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) new URL(apiUrl + path).openConnection();
-        conn.addRequestProperty("Accept", "*/*");
-        conn.addRequestProperty("Host", "lambda");
-        conn.addRequestProperty("User-Agent", userAgent);
-        return conn;
+    public HttpRequestBase createConnection(String method, String path) throws IOException {
+        String url = apiUrl + path;
+        HttpRequestBase request = null;
+        if (method.equals("GET")) {
+            request = new HttpGet(url);
+        }
+        if (method.equals("POST")) {
+            request = new HttpPost(url);
+        }
+        if (method.equals("PUT")) {
+            request = new HttpPut(url);
+        }
+        if (method.equals("DELETE")) {
+            request = new HttpDelete(url);
+        }
+        if (request == null) throw new IllegalArgumentException("Method '" + method + "' is not supported");
+        request.setHeader("Accept", "*/*");
+        request.setHeader("Host", "lambda");
+        request.setHeader("User-Agent", userAgent);
+        return request;
     }
 
     @Override
@@ -65,6 +81,7 @@ public class Avatars extends AbstractModule implements Listener {
             }
         }
         info("[avatars] 共加载 " + avatars.size() + " 个外观配置");
+        checkHealth();
     }
 
     private void reloadAvatars(File avatarsFolder, boolean exportDefault) {
@@ -124,13 +141,29 @@ public class Avatars extends AbstractModule implements Listener {
     }
 
     public void deleteAvatar(UUID uuid) {
-        try {
-            HttpURLConnection conn = createConnection(uuid + "/avatar");
-            conn.setRequestMethod("DELETE");
-            conn.connect();
-            int responseCode = conn.getResponseCode();
-            if (responseCode != 200) {
-                warn("执行失败 DELETE /internal/" + uuid + "/avatar: " + responseCode);
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            HttpRequestBase request = createConnection("DELETE", uuid + "/avatar");
+            try (CloseableHttpResponse response = client.execute(request)) {
+                int responseCode = response.getStatusLine().getStatusCode();
+                if (responseCode != 200) {
+                    warn("执行失败 DELETE /internal/" + uuid + "/avatar: " + responseCode);
+                }
+            }
+        } catch (IOException e) {
+            warn(e);
+        }
+    }
+
+    public void checkHealth() {
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            HttpRequestBase request = createConnection("GET", "health");
+            try (CloseableHttpResponse response = client.execute(request)) {
+                int responseCode = response.getStatusLine().getStatusCode();
+                if (responseCode != 200) {
+                    warn("执行失败 GET /internal/health: " + responseCode);
+                } else {
+                    info("可正常连接到后端");
+                }
             }
         } catch (IOException e) {
             warn(e);
@@ -138,23 +171,16 @@ public class Avatars extends AbstractModule implements Listener {
     }
 
     public void putAvatar(UUID uuid, File file, boolean temp) {
-        try {
-            HttpURLConnection conn = createConnection(uuid + (temp ? "/temp" : "/avatar"));
-            conn.setRequestMethod("PUT");
-            conn.setDoOutput(true);
-            conn.connect();
-            try (OutputStream output = conn.getOutputStream()) {
-                try (FileInputStream input = new FileInputStream(file)) {
-                    byte[] buffer = new byte[1024 * 10];
-                    int len;
-                    while ((len = input.read(buffer)) != -1) {
-                        output.write(buffer, 0, len);
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            HttpRequestBase request = createConnection("PUT", uuid + (temp ? "/temp" : "/avatar"));
+            try (FileInputStream input = new FileInputStream(file)) {
+                ((HttpPut) request).setEntity(new InputStreamEntity(input));
+                try (CloseableHttpResponse response = client.execute(request)) {
+                    int responseCode = response.getStatusLine().getStatusCode();
+                    if (responseCode != 200) {
+                        warn("执行失败 PUT /internal/" + uuid + (temp ? "/temp: " : "/avatar: ") + responseCode);
                     }
                 }
-            }
-            int responseCode = conn.getResponseCode();
-            if (responseCode != 200) {
-                warn("执行失败 PUT /internal/" + uuid + (temp ? "/temp: " : "/avatar: ") + responseCode);
             }
         } catch (IOException e) {
             warn(e);
@@ -162,13 +188,13 @@ public class Avatars extends AbstractModule implements Listener {
     }
 
     public void sendUpdateAvatar(UUID uuid) {
-        try {
-            HttpURLConnection conn = createConnection(uuid + "/event");
-            conn.setRequestMethod("GET");
-            conn.connect();
-            int responseCode = conn.getResponseCode();
-            if (responseCode != 200) {
-                warn("执行失败 GET /internal/" + uuid + "/event: " + responseCode);
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            HttpRequestBase request = createConnection("GET", uuid + "/event");
+            try (CloseableHttpResponse response = client.execute(request)) {
+                int responseCode = response.getStatusLine().getStatusCode();
+                if (responseCode != 200) {
+                    warn("执行失败 GET /internal/" + uuid + "/event: " + responseCode);
+                }
             }
         } catch (IOException e) {
             warn(e);
@@ -176,13 +202,13 @@ public class Avatars extends AbstractModule implements Listener {
     }
 
     public void sendUploadState(UUID uuid, boolean newState) {
-        try {
-            HttpURLConnection conn = createConnection(uuid + "/upload_state/" + newState);
-            conn.setRequestMethod("GET");
-            conn.connect();
-            int responseCode = conn.getResponseCode();
-            if (responseCode != 200) {
-                warn("执行失败 GET /internal/" + uuid + "/upload_state/" + newState + ": " + responseCode);
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            HttpRequestBase request = createConnection("GET", uuid + "/upload_state/" + newState);
+            try (CloseableHttpResponse response = client.execute(request)) {
+                int responseCode = response.getStatusLine().getStatusCode();
+                if (responseCode != 200) {
+                    warn("执行失败 GET /internal/" + uuid + "/upload_state/" + newState + ": " + responseCode);
+                }
             }
         } catch (IOException e) {
             warn(e);
