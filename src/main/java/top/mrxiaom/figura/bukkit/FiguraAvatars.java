@@ -1,5 +1,6 @@
 package top.mrxiaom.figura.bukkit;
         
+import org.bukkit.Bukkit;
 import top.mrxiaom.figura.bukkit.utils.BukkitInventoryFactory;
 import top.mrxiaom.figura.bukkit.utils.InventoryFactory;
 import top.mrxiaom.figura.bukkit.utils.MiniMessageConvert;
@@ -32,6 +33,8 @@ public class FiguraAvatars extends BukkitPlugin {
 
     @Override
     protected void beforeEnable() {
+        Bukkit.getMessenger().registerOutgoingPluginChannel(this, "figura:uuid");
+        Bukkit.getMessenger().registerOutgoingPluginChannel(this, "figura:wardrobe");
         MiniMessageConvert.init();
         if (Util.isPresent("com.destroystokyo.paper.utils.PaperPluginLogger")) {
             inventoryFactory = new PaperInventoryFactory();
