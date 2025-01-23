@@ -1,12 +1,14 @@
 package top.mrxiaom.figura.bukkit.commands;
         
 import com.google.common.collect.Lists;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.mrxiaom.figura.bukkit.Messages;
@@ -51,7 +53,14 @@ public class CommandMain extends AbstractModule implements CommandExecutor, TabC
         }
         if (args.length == 1 && "reload".equalsIgnoreCase(args[0]) && sender.isOp()) {
             plugin.reloadConfig();
-            return Messages.commands__reload.tm(sender);
+            Messages.commands__reload.tm(sender);
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                InventoryHolder holder = player.getOpenInventory().getTopInventory().getHolder();
+                if (holder instanceof GuiAvatars.Impl) {
+                    ((GuiAvatars.Impl) holder).markLegacy();
+                }
+            }
+            return true;
         }
         return (sender.isOp() ? Messages.commands__help__admin : Messages.commands__help__normal).tm(sender);
     }

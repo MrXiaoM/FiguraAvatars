@@ -1,5 +1,6 @@
 package top.mrxiaom.figura.bukkit.gui;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.Player;
@@ -7,9 +8,13 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import top.mrxiaom.figura.bukkit.FiguraAvatars;
+import top.mrxiaom.figura.bukkit.Messages;
 import top.mrxiaom.figura.bukkit.func.AbstractGuiModule;
 import top.mrxiaom.pluginbase.func.AutoRegister;
 import top.mrxiaom.pluginbase.func.gui.LoadedIcon;
@@ -86,9 +91,26 @@ public class GuiAvatars extends AbstractGuiModule {
         return new Impl(player);
     }
 
-    public class Impl extends Gui {
+    public class Impl extends Gui implements InventoryHolder {
+        private Inventory created;
+        private boolean legacy = false;
         protected Impl(Player player) {
             super(player, guiTitle, guiInventory);
+        }
+
+        public void markLegacy() {
+            this.legacy = true;
+        }
+
+        @NotNull
+        @Override
+        public Inventory getInventory() {
+            return created;
+        }
+
+        @Override
+        protected Inventory create(InventoryHolder holder, int size, String title) {
+            return created = Bukkit.createInventory(this, size, title);
         }
 
         @Override
@@ -98,6 +120,11 @@ public class GuiAvatars extends AbstractGuiModule {
                             InventoryView view, InventoryClickEvent event
         ) {
             event.setCancelled(true);
+            if (legacy) {
+                Messages.gui__legacy.tm(player);
+                player.closeInventory();
+                return;
+            }
         }
     }
 

@@ -14,6 +14,7 @@ public enum Messages implements IHolderAccessor {
     commands__no_permission("&c你没有执行该命令的权限"),
     player__not_found("&e玩家不在线 (或不存在)"),
     player__only("&e该操作只能由玩家执行"),
+    gui__legacy("&e管理员重载了插件配置，请重新打开菜单"),
     commands__help__normal("",
             "&c&lFiguraAvatars&r &b帮助命令",
             "&f/avatars open &7打开菜单",
