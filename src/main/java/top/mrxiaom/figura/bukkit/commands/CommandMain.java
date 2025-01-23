@@ -5,12 +5,15 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.mrxiaom.figura.bukkit.gui.GuiAvatars;
 import top.mrxiaom.pluginbase.func.AutoRegister;
 import top.mrxiaom.figura.bukkit.FiguraAvatars;
 import top.mrxiaom.figura.bukkit.func.AbstractModule;
+import top.mrxiaom.pluginbase.utils.Util;
 
 import java.util.*;
 
@@ -23,6 +26,28 @@ public class CommandMain extends AbstractModule implements CommandExecutor, TabC
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (args.length >= 1 && "open".equalsIgnoreCase(args[0])) {
+            Player target;
+            if (args.length >= 2) {
+                if (!sender.hasPermission("figura.avatars.open.other")) {
+                    return t(sender, "&a你没有权限执行此操作");
+                }
+                target = Util.getOnlinePlayer(args[1]).orElse(null);
+                if (target == null) {
+                    return t(sender, "&e玩家不在线 (或不存在)");
+                }
+            } else {
+                target = sender instanceof Player ? (Player) sender : null;
+                if (target == null) {
+                    return t(sender, "&e只有玩家才能执行该命令");
+                }
+                if (!target.hasPermission("figura.avatars.open")) {
+                    return t(target, "&a你没有权限执行此操作");
+                }
+            }
+            GuiAvatars.inst().createGui(target).open();
+            return true;
+        }
         if (args.length == 1 && "reload".equalsIgnoreCase(args[0]) && sender.isOp()) {
             plugin.reloadConfig();
             return t(sender, "&a配置文件已重载");

@@ -1,0 +1,46 @@
+title: '选择外观'
+
+inventory:
+  - '框框框框框框框框框'
+  - '框项项项项项项项框'
+  - '上项项项项项项项下'
+  - '框框框框框框框框框'
+  - '框框框框返框框框框'
+
+main-icons:
+  项:
+    material: PAPER
+    display: '&e&l%name%'
+    redirect: ' '
+    lore:
+      - '&f作者: &e%author%'
+      - '&f简介:'
+      - description
+      - ''
+      - operation
+    operations:
+      preview:
+        - '&a左键&7 | &f预览'
+      equip:
+        - '&b右键&7 | &f切换到该外观'
+      equip-no-permission:
+        - '&c&m右键&7 | &f没有权限'
+  上:
+    material: LIME_STAINED_GLASS_PANE
+    redirect: 框
+    display: '&e上一页'
+    lore: []
+  下:
+    material: LIME_STAINED_GLASS_PANE
+    redirect: 框
+    display: '&e下一页'
+    lore: []
+other-icons:
+  框:
+    material: WHITE_STAINED_GLASS_PANE
+    display: '&d&l*'
+  返:
+    material: RED_DYE
+    display: '&e&l返回'
+    left-click-commands:
+      - '[console]dm open cd_main %player_name%'
