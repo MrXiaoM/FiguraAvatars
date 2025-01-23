@@ -2,6 +2,9 @@ package top.mrxiaom.figura.bukkit.func;
 
 import com.google.common.collect.Lists;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.ByteBufUtil;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,6 +35,11 @@ public class Avatars extends AbstractModule implements Listener {
 
     @EventHandler
     public void on(PlayerJoinEvent e) {
+        UUID uuid = e.getPlayer().getUniqueId();
+        ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer();
+        buffer.writeLong(uuid.getMostSignificantBits());
+        buffer.writeLong(uuid.getLeastSignificantBits());
+        customPayload(e.getPlayer(), "figura:uuid", ByteBufUtil.getBytes(buffer));
         sendUploadState(e.getPlayer().getUniqueId(), e.getPlayer().hasPermission("figura.upload"));
     }
 

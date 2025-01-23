@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20-R0.1-SNAPSHOT")
-    // compileOnly("org.spigotmc:spigot:1.20") // NMS
+    compileOnly("io.netty:netty-buffer:4.1.97.Final")
 
     compileOnly("me.clip:placeholderapi:2.11.6")
 
