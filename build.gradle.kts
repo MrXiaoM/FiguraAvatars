@@ -29,9 +29,8 @@ dependencies {
     implementation("net.kyori:adventure-api:4.17.0")
     implementation("net.kyori:adventure-platform-bukkit:4.3.4")
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
-    implementation("de.tr7zw:item-nbt-api:2.13.2")
-    implementation("com.zaxxer:HikariCP:4.0.3") { isTransitive = false }
-    implementation("org.jetbrains:annotations:21.0.0")
+    implementation("de.tr7zw:item-nbt-api:2.14.1")
+    implementation("org.jetbrains:annotations:24.0.0")
     implementation("top.mrxiaom:PluginBase:1.2.2")
     implementation(project(":paper"))
 }
@@ -42,7 +41,6 @@ tasks {
             "org.intellij.lang.annotations" to "annotations.intellij",
             "org.jetbrains.annotations" to "annotations.jetbrains",
             "top.mrxiaom.pluginbase" to "base",
-            "com.zaxxer.hikari" to "hikari",
             "de.tr7zw.changeme.nbtapi" to "nbtapi",
             "net.kyori" to "kyori",
         ).forEach { (original, target) ->
