@@ -1,6 +1,8 @@
 package top.mrxiaom.figura.bukkit;
         
 import org.bukkit.Bukkit;
+import top.mrxiaom.figura.bukkit.actions.ActionWardrobe;
+import top.mrxiaom.figura.bukkit.func.AbstractGuiModule;
 import top.mrxiaom.figura.bukkit.utils.BukkitInventoryFactory;
 import top.mrxiaom.figura.bukkit.utils.InventoryFactory;
 import top.mrxiaom.figura.bukkit.utils.MiniMessageConvert;
@@ -45,6 +47,7 @@ public class FiguraAvatars extends BukkitPlugin {
         LanguageManager.inst()
                 .setLangFile("messages.yml")
                 .register(Messages.class, Messages::holder);
+        AbstractGuiModule.registerActionProvider(ActionWardrobe.PROVIDER);
     }
 
     @Override

@@ -6,7 +6,7 @@ inventory:
   - '框项项项项项项项框'
   - '上项项项项项项项下'
   - '框框框框框框框框框'
-  - '框框框框返框框框框'
+  - '框衣框框返框框框框'
 # 主要图标
 main-icons:
   项:
@@ -50,3 +50,10 @@ other-icons:
     display: '&e&l返回'
     left-click-commands:
       - '[console]dm open cd_main %player_name%'
+  衣:
+    material: GOLDEN_CHESTPLATE
+    display: '&e&l打开衣柜'
+    lore:
+      - '&f打开 Figura Mod 衣柜'
+    left-click-commands:
+      - '[wardrobe]'
