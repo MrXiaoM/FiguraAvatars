@@ -91,7 +91,7 @@ public class Avatars extends AbstractModule implements Listener {
             if (exportDefault) {
                 File folder = new File(avatarsFolder, "hoshino");
                 plugin.saveResource("avatars/hoshino/metadata.yml", new File(folder, "metadata.yml"));
-                plugin.saveResource("avatars/hoshino/hoshino.moon", new File(folder, "hoshino.moon"));
+                plugin.saveResource("avatars/hoshino/exported_avatar.nbt", new File(folder, "exported_avatar.nbt"));
                 plugin.saveResource("avatars/hoshino/LICENSE", new File(folder, "LICENSE"));
             }
         }
