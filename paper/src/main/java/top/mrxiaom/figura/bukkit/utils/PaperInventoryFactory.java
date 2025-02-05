@@ -22,7 +22,14 @@ public class PaperInventoryFactory implements InventoryFactory {
         return miniMessage.deserialize(MiniMessageConvert.legacyToMiniMessage(text));
     }
     @Override
+    @SuppressWarnings({"deprecation"})
     public Inventory create(InventoryHolder owner, int size, String title) {
-        return Bukkit.createInventory(owner, size, miniMessage(title.startsWith("&") ? title : ("&0" + title)));
+        try {
+            Component guiTitle = miniMessage(title);
+            return Bukkit.createInventory(owner, size, guiTitle);
+        } catch (LinkageError e) {
+            String guiTitle = MiniMessageConvert.miniMessageToLegacy(title);
+            return Bukkit.createInventory(owner, size, guiTitle);
+        }
     }
 }

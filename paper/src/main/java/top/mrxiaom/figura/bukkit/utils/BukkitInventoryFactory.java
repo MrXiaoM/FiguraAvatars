@@ -6,7 +6,9 @@ import org.bukkit.inventory.InventoryHolder;
 
 public class BukkitInventoryFactory implements InventoryFactory {
     @Override
+    @SuppressWarnings({"deprecation"})
     public Inventory create(InventoryHolder owner, int size, String title) {
-        return Bukkit.createInventory(owner, size, MiniMessageConvert.miniMessageToLegacy(title.startsWith("&") ? title : ("&0" + title)));
+        String guiTitle = MiniMessageConvert.miniMessageToLegacy(title);
+        return Bukkit.createInventory(owner, size, guiTitle);
     }
 }
