@@ -215,7 +215,7 @@ public class GuiAvatars extends AbstractGuiModule {
 
         @Override
         protected Inventory create(InventoryHolder holder, int size, String title) {
-            return created = Bukkit.createInventory(this, size, title);
+            return created = plugin.getInventoryFactory().create(this, size, title);
         }
 
         public Avatar getAvatar(int slot) {
